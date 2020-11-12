@@ -36,7 +36,7 @@ COPYRIGHT:    (C) 2019 by the GRASS Development Team
 #%option
 #% key: dir_type
 #% label: Direction type
-#% description: Type of diretion encoding in diections input raster map (default: auto)
+#% description: Type of direction encoding in directions input raster map (default: auto). Input direction to be CCW from East.
 #% options: 45degree,degree,bitmask,bitmask_k,auto
 #% type: string
 #% required: YES
@@ -157,7 +157,7 @@ def main():
 
     dir_type = check_directions(dir_format,float(dir_values['max']))
 
-    # Ceck if number of requested steps and outputs match
+    # Check if number of requested steps and outputs match
     if len(outputs) != len(steps):
         gscript.fatal(_("Number of steps and number of output maps differ"))
 
@@ -227,7 +227,7 @@ if(isnull({{dist_in}}[0,1]),{{dist_in}},{{dist_in}}[0,1]))))))))
         kwargs['dist_sum_out'] = '{}_dist_sum_even'.format(tmpname)
 
         # Start processing
-        curent_region = gscript.region()
+        current_region = gscript.region()
 
         gscript.run_command('r.mapcalc', overwrite=True, quiet=True,
                             expression="""{dist_in}=\
@@ -236,8 +236,8 @@ if({dir} == {NE} || {dir} == {NW} || {dir} == {SW}\
 if({dir} == {N} || {dir} == {S},{nsres},{ewres}))
 {dist_sum_in}=0""".format(NE=dirs[0], NW=dirs[2], SW=dirs[4], SE=dirs[6],
                           N=dirs[1], S=dirs[5],
-                          nsres=curent_region['nsres'],
-                          ewres=curent_region['ewres'],
+                          nsres=current_region['nsres'],
+                          ewres=current_region['ewres'],
                           dir=direction,
                           dist_in=kwargs['dist_in'],
                           dist_sum_in=kwargs['dist_sum_in']))
